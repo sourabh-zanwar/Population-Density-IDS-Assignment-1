@@ -143,8 +143,9 @@ sns.jointplot(df_cleaned['population_density'],df_cleaned['temperature'],kind='k
 
 # In[ ]:
 
-
 # Your code:
+df_cleaned['temperature_categorical'] = pd.qcut(df_cleaned['temperature'], q = 3, labels = ['low','medium','high'])
+
 
 
 #    (b) In the new dataset (created in Section 'a'), consider "holiday", "temperature_categorical", and "weather_type" as    the descriptive features and "population_density_categorical" as the target feature. Set the minimum number of samples  for splitting to 5000 and make a decision tree based on entropy.
@@ -154,7 +155,10 @@ sns.jointplot(df_cleaned['population_density'],df_cleaned['temperature'],kind='k
 
 # Your code:
 
+descriptive_features = ['holiday', 'temperature_categorical','weather_type']
+target_feature = ['population_density_categorical']
 
+from sklearn import 
 #    (c) What is the best attribute (based on entropy) for splitting the tree in the second round of ID3?  
 
 # Explanation: 
