@@ -54,9 +54,7 @@ import sklearn
 df = pd.read_csv('population_density.csv')
 skip = sorted(random.sample(range(int(df.shape[0])),int(df.shape[0]*0.1)))
 df = pd.read_csv('population_density.csv', skiprows=skip) #Random sampling of the data
-categorical = pd.cut(df['population_density'], bins=[0,1456,2912,4368,5824,7281],include_lowest=True,labels=['very low','low','medium','high','very high']) #Binning the data and labeling them
-df.drop('population_density', axis = 1, inplace = True)
-df['population_density']=categorical
+df['population_density_categorical'] = pd.cut(df['population_density'], bins=[0,1456,2912,4368,5824,7281],include_lowest=True,labels=['very low','low','medium','high','very high']) #Binning the data and labeling them
 df.to_csv('population_density_categorical.csv')  #Exporting the dataframe to csv
 
 
@@ -101,6 +99,10 @@ print(np.var(df_cleaned['temperature'])) #variance for the 'temperature' for unc
 
 
 # Your code:
+print('number of rows before cleaning : ', df.shape[0])
+print('number of rows after cleaning : ', df_cleaned.shape[0])
+diff = df.shape[0]-df_cleaned.shape[0]
+print('Number of datarows removed by removing outliers : ', diff)
 
 
 # ### Basic Visualization (10 points)
@@ -118,7 +120,8 @@ print(np.var(df_cleaned['temperature'])) #variance for the 'temperature' for unc
 
 
 # Your code:
-
+sns.distplot(df['temperature'])
+sns.distplot(df_cleaned['temperature'])
 
 #    (f) Explore the distribution of "population_density" and "temperature" together in the cleaned dataset. Specify the ranges of "temperature" and "population_density" for which the frequency of the data is the highest.
 
@@ -126,7 +129,10 @@ print(np.var(df_cleaned['temperature'])) #variance for the 'temperature' for unc
 
 
 # Your code:
-
+sns.jointplot(df_cleaned['population_density'],df_cleaned['temperature'],kind='kde')
+#The population density and the temperature for which the frequency is maximum is
+# Temperature range 289 to 292
+# Population Density range 400 to 700
 
 # ## Question 2 - Decision Trees (15 points):
 
