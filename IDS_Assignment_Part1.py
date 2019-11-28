@@ -154,11 +154,11 @@ df_cleaned['temperature_categorical'] = pd.qcut(df_cleaned['temperature'], q = 3
 
 # Your code:
 from sklearn.tree import DecisionTreeClassifier
-#from p_decision_tree.DecisionTree import DecisionTree
+from p_decision_tree.DecisionTree import DecisionTree
 descriptive_features = ['holiday', 'temperature_categorical','weather_type']
 target_feature = ['population_density_categorical']
-X = df_cleaned[descriptive_features]
-Y = df_cleaned[target_feature]
+X = df_cleaned[descriptive_features].values
+Y = df_cleaned[target_feature].values
 
 
 
@@ -173,27 +173,24 @@ Y = df_cleaned[target_feature]
 
 
 
-from sklearn.preprocessing import LabelEncoder,OneHotEncoder
-labelencoder_X = LabelEncoder()
-X['holiday'] = labelencoder_X.fit_transform(X['holiday'])
-X['temperature_categorical'] = labelencoder_X.fit_transform(X['temperature_categorical'])
-X['weather_type'] = labelencoder_X.fit_transform(X['weather_type'])
-onehotencoder = OneHotEncoder()
-X_encoded = onehotencoder.fit_transform(X).toarray()
+#from sklearn.preprocessing import LabelEncoder,OneHotEncoder
+#labelencoder_X = LabelEncoder()
+#X['holiday'] = labelencoder_X.fit_transform(X['holiday'])
+#X['temperature_categorical'] = labelencoder_X.fit_transform(X['temperature_categorical'])
+#X['weather_type'] = labelencoder_X.fit_transform(X['weather_type'])
+#onehotencoder = OneHotEncoder()
+#X_encoded = onehotencoder.fit_transform(X).toarray()
+#
+#labelencoder_Y = LabelEncoder()
+#Y = labelencoder_Y.fit_transform(Y)
+#
+#
+#classifier = DecisionTreeClassifier(criterion = 'entropy',min_samples_split=5000)
+#classifier.fit(X,Y)
 
-labelencoder_Y = LabelEncoder()
-Y = labelencoder_Y.fit_transform(Y)
-
-
-classifier = DecisionTreeClassifier(criterion = 'entropy',min_samples_split=5000)
-classifier.fit(X,Y)
-
-
-#data_descriptive = df_cleaned[descriptive_features].values
-#data_target = df_cleaned[target_feature].values
-#decisionTree = DecisionTree(data_descriptive.tolist(),descriptive_features,data_target.tolist(),"entropy")
-#decisionTree.id3(0,5000)
-#decisionTree.print_visualTree()
+decisionTree = DecisionTree(X.tolist(),descriptive_features,Y.tolist(),"entropy")
+decisionTree.id3(0,5000)
+decisionTree.print_visualTree(render = True)
 
 
 #    (c) What is the best attribute (based on entropy) for splitting the tree in the second round of ID3?  
