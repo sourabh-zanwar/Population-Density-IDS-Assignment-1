@@ -49,7 +49,6 @@ import numpy as np #For Mathematics
 import matplotlib.pyplot as plt #For Plotting charts
 import pandas as pd #For importing and managing Datasets
 import random
-import sklearn
 
 df = pd.read_csv('population_density.csv')
 skip = sorted(random.sample(range(int(df.shape[0])),int(df.shape[0]*0.1)))
@@ -154,11 +153,49 @@ df_cleaned['temperature_categorical'] = pd.qcut(df_cleaned['temperature'], q = 3
 
 
 # Your code:
-
+from sklearn.tree import DecisionTreeClassifier
+#from p_decision_tree.DecisionTree import DecisionTree
 descriptive_features = ['holiday', 'temperature_categorical','weather_type']
 target_feature = ['population_density_categorical']
+X = df_cleaned[descriptive_features]
+Y = df_cleaned[target_feature]
 
-from sklearn import 
+
+
+
+#
+#from sklearn.preprocessing import LabelEncoder,OneHotEncoder
+#labelencoder_X = LabelEncoder()
+#integer_encoded_holidays = labelencoder_X.fit_transform(X['holiday'].values)
+#integer_encoded_temp_categorical = labelencoder_X.fit_transform(X['temperature_categorical'].values)
+#integer_encoded_weather_type = labelencoder_X.fit_transform(X['weather_type'].values)
+#onehotencoder = OneHotEncoder(categorical_features = [0])
+
+
+
+from sklearn.preprocessing import LabelEncoder,OneHotEncoder
+labelencoder_X = LabelEncoder()
+X['holiday'] = labelencoder_X.fit_transform(X['holiday'])
+X['temperature_categorical'] = labelencoder_X.fit_transform(X['temperature_categorical'])
+X['weather_type'] = labelencoder_X.fit_transform(X['weather_type'])
+onehotencoder = OneHotEncoder()
+X_encoded = onehotencoder.fit_transform(X).toarray()
+
+labelencoder_Y = LabelEncoder()
+Y = labelencoder_Y.fit_transform(Y)
+
+
+classifier = DecisionTreeClassifier(criterion = 'entropy',min_samples_split=5000)
+classifier.fit(X,Y)
+
+
+#data_descriptive = df_cleaned[descriptive_features].values
+#data_target = df_cleaned[target_feature].values
+#decisionTree = DecisionTree(data_descriptive.tolist(),descriptive_features,data_target.tolist(),"entropy")
+#decisionTree.id3(0,5000)
+#decisionTree.print_visualTree()
+
+
 #    (c) What is the best attribute (based on entropy) for splitting the tree in the second round of ID3?  
 
 # Explanation: 
@@ -174,12 +211,15 @@ from sklearn import
 
 
 # Your code:
-
+reg_features = ['holiday', 'temperature', 'rain_1h', 'snow_1h', 'clouds_percentage', 'date_time','population_density']
+reg_df = df_cleaned[reg_features]
+reg_df['date_time'] = pd.DatetimeIndex(reg_df['date_time']).time
 
 #    (a) Which features are suitable as an input for linear regression and which need to be modified first? Why?
 
-# Explanation:
-# 
+# Explanation: 
+#  To be modified : holiday, date_time
+#  Suitable features : temperature, rain_1h, snow_1h, cloud_percentage
 
 #    (b) Implement and briefly motivate an adequate modification. Print the resulting data set limited to the first two data rows.
 
@@ -198,6 +238,9 @@ from sklearn import
 
 
 # Your code:
+sns.barplot(x="date_time", y="population_density", data=df_cleaned)
+
+
 
 
 #    (d) Create two distinct subsets of the data. Use sampling methods as described in the lecture. You should end up with two DIFFERENT sample data sets *RegA, RegB*. Include these data sets in the submitted data set zip file. 
